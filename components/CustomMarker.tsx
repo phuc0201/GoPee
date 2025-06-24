@@ -3,6 +3,7 @@ import { Image, StyleSheet } from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
+  useDerivedValue,
   useSharedValue,
   withRepeat,
   withSequence,
@@ -35,27 +36,20 @@ const styles = StyleSheet.create({
 export default function CustomMarker({ isMoving }: CustomMarkerProps) {
   const translateY = useSharedValue(0);
   const scale = useSharedValue(0);
-  const opacity = useSharedValue(0);
+  const opacity = useDerivedValue(() => {
+    if (scale.value <= 0.5) {
+      return (scale.value / 0.5) * 0.1;
+    } else {
+      return ((1 - scale.value) / 0.5) * 0.1;
+    }
+  });
   const [hiddenRippleDot, setHiddenRippleDot] = useState<boolean>(false);
 
   useEffect(() => {
     if (!isMoving) {
-      scale.value = withRepeat(
-        withTiming(1, {
-          duration: 1000,
-        }),
-        -1,
-        false
-      );
-      opacity.value = withRepeat(
-        withTiming(0.1, {
-          duration: 1000,
-        }),
-        -1,
-        false
-      );
+      scale.value = withRepeat(withTiming(1, { duration: 1000 }), -1, false);
     } else {
-      ((scale.value = 0), (opacity.value = 0));
+      scale.value = 0;
     }
   }, [isMoving]);
 
