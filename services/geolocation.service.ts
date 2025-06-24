@@ -1,5 +1,4 @@
 import axios from "axios";
-
 export const searchAddressByCoords = ({
   latitude,
   longitude,
@@ -7,7 +6,7 @@ export const searchAddressByCoords = ({
   latitude: number;
   longitude: number;
 }) => {
-  const apiKey = "";
+  const apiKey = process.env.EXPO_PUBLIC_GOONG_MAP_API;
 
   return axios
     .get("https://rsapi.goong.io/geocode", {
