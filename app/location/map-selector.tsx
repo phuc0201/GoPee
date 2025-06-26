@@ -36,8 +36,8 @@ export default function MapScreen() {
   const [region, setRegion] = useState({
     latitude: 10.748528025906648,
     longitude: 106.62654141594453,
-    latitudeDelta: 0.001,
-    longitudeDelta: 0.001,
+    latitudeDelta: 0.01,
+    longitudeDelta: 0.01,
   });
 
   useEffect(() => {
@@ -48,8 +48,8 @@ export default function MapScreen() {
       setRegion({
         latitude: location.coordinates.latitude,
         longitude: location.coordinates.longitude,
-        latitudeDelta: 0.001,
-        longitudeDelta: 0.001,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
       });
     });
   }, []);

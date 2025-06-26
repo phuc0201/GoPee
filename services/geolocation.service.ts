@@ -5,6 +5,8 @@ import {
   LocationApiResponse,
 } from "@/models/location.model";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ExpoLocation from "expo-location";
+import { Alert, Linking } from "react-native";
 import { client } from "./client";
 
 const apiKey = process.env.EXPO_PUBLIC_GOONG_MAP_API;
@@ -17,6 +19,19 @@ export const searchAddressByCoords = ({
     .get("https://rsapi.goong.io/geocode", {
       params: {
         latlng: `${latitude},${longitude}`,
+        api_key: apiKey,
+      },
+    })
+    .then((response) => response.data);
+};
+
+export const searchLocationByAddress = (
+  address: string
+): Promise<LocationApiResponse> => {
+  return client
+    .get("https://rsapi.goong.io/geocode", {
+      params: {
+        address: address,
         api_key: apiKey,
       },
     })
@@ -52,4 +67,29 @@ export const clearAllAsyncStorage = async () => {
   } catch (e) {
     console.error("Lỗi khi xóa AsyncStorage:", e);
   }
+};
+
+export const requestLocationPermission = async (): Promise<any> => {
+  const { status } = await ExpoLocation.requestForegroundPermissionsAsync();
+
+  if (status !== "granted") {
+    Alert.alert(
+      "Yêu cầu quyền truy cập",
+      "Ứng dụng cần quyền truy cập vị trí để hoạt động",
+      [
+        {
+          text: "Mở cài đặt",
+          onPress: () => Linking.openSettings(),
+        },
+        { text: "Hủy", style: "cancel" },
+      ]
+    );
+    return null;
+  }
+
+  const location = await ExpoLocation.getCurrentPositionAsync({})
+    .then((res) => res)
+    .catch(() => null);
+
+  return location ? location.coords : null;
 };
