@@ -44,7 +44,6 @@ export const onSaveLocation = async (location: Location) => {
       SystemConstants.LOCATION,
       JSON.stringify(location)
     );
-    console.log("Location saved:", location);
   } catch (error) {
     console.error("Failed to save location:", error);
   }

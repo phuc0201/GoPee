@@ -8,13 +8,7 @@ import {
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { useRouter } from "expo-router";
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
@@ -54,13 +48,7 @@ export default function MapScreen() {
     });
   }, []);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    console.log("handleSheetChanges", index);
-  }, []);
-
   const handleRegionChangeComplete = (region: any) => {
-    console.log(region);
-
     if (isSearchingAddressSuggestion) {
       searchAddressByCoords({
         latitude: region.latitude,
@@ -156,7 +144,6 @@ export default function MapScreen() {
         <BottomSheet
           snapPoints={snapPoint}
           ref={bottomSheetRef}
-          onChange={handleSheetChanges}
           enablePanDownToClose={false}
           handleStyle={{
             height: 40,
