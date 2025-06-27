@@ -99,45 +99,46 @@ export function HomeCategory() {
             ) : (
               <View
                 style={{
-                  width: 36,
-                  height: 36,
-                  marginBottom: 3,
+                  width: 24,
+                  height: 24,
+                  marginTop: 8,
+                  marginBottom: 8,
                   flexDirection: "row",
                   flexWrap: "wrap",
                 }}
               >
                 <View
                   style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: 5,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 3,
                     backgroundColor: "#18804B",
                     margin: 1,
                   }}
                 />
                 <View
                   style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: 5,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 3,
                     backgroundColor: "#22B15D",
                     margin: 1,
                   }}
                 />
                 <View
                   style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: 5,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 3,
                     backgroundColor: "#18804B",
                     margin: 1,
                   }}
                 />
                 <View
                   style={{
-                    width: 16,
-                    height: 16,
-                    borderRadius: 5,
+                    width: 10,
+                    height: 10,
+                    borderRadius: 3,
                     backgroundColor: "#22B15D",
                     margin: 1,
                   }}

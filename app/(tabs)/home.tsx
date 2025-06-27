@@ -1,5 +1,8 @@
+import BannerCarousel from "@/components/BannerCarousel";
+import CardList from "@/components/CardList";
 import { HomeCategory } from "@/components/HomeCategory";
 import EvilIcons from "@expo/vector-icons/EvilIcons";
+import FontAwesome from "@expo/vector-icons/FontAwesome";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useRouter } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -90,6 +93,54 @@ export default function Index() {
         {HeaderContent}
         <View className="flex-1 p-4 bg-white">
           <HomeCategory />
+          {/*  */}
+          <View
+            style={{
+              flexDirection: "row",
+              flexWrap: "wrap",
+              marginLeft: -4,
+              marginRight: -4,
+            }}
+          >
+            <TouchableOpacity
+              style={{
+                width: "50%",
+                padding: 4,
+              }}
+            >
+              <View className="border border-gray-200 rounded-xl p-3">
+                <Text className="text-gray-500 text-sm">Thanh toán</Text>
+                <View className="flex-row justify-between">
+                  <Text>Thêm thẻ</Text>
+                  <FontAwesome
+                    name="credit-card-alt"
+                    size={18}
+                    color="#58bc6b"
+                  />
+                </View>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: "50%",
+                padding: 4,
+              }}
+            >
+              <View className="border border-gray-200 rounded-xl p-3">
+                <Text className="text-gray-500 text-sm">GoPeeRewards</Text>
+                <View className="flex-row justify-between">
+                  <Text>0</Text>
+                  <Image
+                    source={require("../../assets/images/coin.png")}
+                    className="w-5 h-5 object-contain"
+                  ></Image>
+                </View>
+              </View>
+            </TouchableOpacity>
+          </View>
+          {/*  */}
+          <BannerCarousel />
+          <CardList />
         </View>
       </ScrollView>
     </View>
