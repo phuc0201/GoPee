@@ -1,6 +1,9 @@
+import { useRouter } from "expo-router";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
 export function HomeCategory() {
+  const router = useRouter();
+
   const categories = [
     {
       id: 1,
@@ -78,6 +81,7 @@ export function HomeCategory() {
           }}
         >
           <TouchableOpacity
+            onPress={() => router.replace("/destination")}
             style={{
               padding: 10,
               alignItems: "center",

@@ -8,6 +8,10 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <Stack>
         <Stack.Screen name="location" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="destination"
+          options={{ headerShown: false }}
+        ></Stack.Screen>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
       <Toast />

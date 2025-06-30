@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-export default function AutoGetLocation() {
+export default function GeoLocationScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [selectedAddress, setSelectedAddress] = useState<Location>();

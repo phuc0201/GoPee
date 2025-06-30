@@ -19,7 +19,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const SCROLL_THRESHOLD = 10;
 
-export default function Index() {
+export default function HomeScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
