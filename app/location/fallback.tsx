@@ -92,7 +92,7 @@ export default function Fallback() {
         </TouchableOpacity>
         <Text>Vị trí của bạn</Text>
         <TouchableOpacity
-          onPress={() => router.replace("/location/map-selector")}
+          onPress={() => router.push("/location/pickup-selector")}
         >
           <SimpleLineIcons name="map" size={18} color={"#6b7280"} />
         </TouchableOpacity>
@@ -107,7 +107,6 @@ export default function Fallback() {
         <Text className="text-sm text-gray-500">
           Địa chỉ hiện tại:
           <Text className="text-gray-700 font-medium">
-            {" "}
             {selectedAddress?.address}
           </Text>
         </Text>

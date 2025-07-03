@@ -7,6 +7,18 @@ export default function DestinationLayout() {
         name="index"
         options={{ headerShown: false }}
       ></Stack.Screen>
+      <Stack.Screen
+        name="dropoff-selector"
+        options={{
+          headerShown: false,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="search-address"
+        options={{
+          headerShown: false,
+        }}
+      ></Stack.Screen>
     </Stack>
   );
 }

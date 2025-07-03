@@ -5,7 +5,7 @@ export default function LocationLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="fallback" options={{ headerShown: false }} />
-      <Stack.Screen name="map-selector" options={{ headerShown: false }} />
+      <Stack.Screen name="pickup-selector" options={{ headerShown: false }} />
     </Stack>
   );
 }

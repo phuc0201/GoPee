@@ -58,7 +58,7 @@ export default function HomeScreen() {
         </TouchableOpacity>
 
         <TouchableOpacity
-          onPress={() => router.replace("/location/fallback")}
+          onPress={() => router.push("/location/fallback")}
           className="flex-1 bg-white p-[9px] rounded-xl flex-row items-center gap-2 shadow-lg"
         >
           <EvilIcons name="search" size={24} color="gray" className="pb-1" />

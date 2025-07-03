@@ -2,6 +2,7 @@ import CustomMarker from "@/components/CustomMarker";
 import { Location } from "@/models/location.model";
 import {
   getCurrentLocation,
+  onSaveDropoffLocation,
   onSaveLocation,
   searchAddressByCoords,
 } from "@/services/geolocation.service";
@@ -15,7 +16,15 @@ import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-simple-toast";
 
-export default function MapScreen() {
+interface MapSelectorProps {
+  isDropoff?: boolean;
+  isBack?: boolean;
+}
+
+export default function MapSelector({
+  isDropoff,
+  isBack = false,
+}: MapSelectorProps) {
   const router = useRouter();
   const mapRef = useRef<MapView>(null);
   const insets = useSafeAreaInsets();
@@ -35,7 +44,8 @@ export default function MapScreen() {
   });
 
   useEffect(() => {
-    getCurrentLocation().then((location) => {
+    const fetchLocation = async () => {
+      const location = await getCurrentLocation();
       if (!location) return;
 
       setSelectedAddress(location);
@@ -45,8 +55,9 @@ export default function MapScreen() {
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       });
-    });
-  }, []);
+    };
+    fetchLocation();
+  }, [isDropoff]);
 
   const handleRegionChangeComplete = (region: any) => {
     if (isSearchingAddressSuggestion) {
@@ -94,26 +105,36 @@ export default function MapScreen() {
     }, 100);
   }
 
-  function onSubmitSelectAddress() {
+  async function onSubmitSelectAddress() {
     if (!selectedAddress) {
       Toast.show("Vui lòng chọn địa chỉ!", Toast.SHORT);
       return;
     }
 
-    onSaveLocation(selectedAddress);
+    if (isDropoff) {
+      await onSaveDropoffLocation(selectedAddress);
+      router.push("/booking/choose-vehicle");
+      return;
+    } else await onSaveLocation(selectedAddress);
 
-    router.replace("/(tabs)/home");
+    if (isBack) {
+      router.back();
+    } else router.replace("/(tabs)/home");
   }
 
   return (
     <GestureHandlerRootView
       style={{
         flex: 1,
-        paddingTop: insets.top,
         paddingBottom: insets.bottom,
       }}
     >
-      <View className="flex-1 -mb-[80%]">
+      <View
+        style={{
+          marginBottom: "-80%",
+        }}
+        className="flex-1"
+      >
         <MapView
           ref={mapRef}
           style={{ flex: 1 }}
@@ -125,11 +146,11 @@ export default function MapScreen() {
           onRegionChange={handleRegionChange}
         ></MapView>
         <TouchableOpacity
-          onPress={() => router.replace("/location/fallback")}
+          onPress={() => router.back()}
           className="bg-white w-12 h-12 rounded-full flex items-center justify-center"
           style={{
             position: "absolute",
-            top: 10,
+            top: insets.top + 10,
             left: 16,
             zIndex: 10,
             elevation: 5,
@@ -182,12 +203,23 @@ export default function MapScreen() {
         </BottomSheet>
       </View>
 
-      <View className="absolute bottom-0 z-10 bg-white w-full h-[12%] shadow-lg flex-row items-center justify-center px-10">
+      <View
+        style={{
+          position: "absolute",
+          bottom: 0,
+          paddingLeft: 40,
+          paddingRight: 40,
+          height: 80,
+        }}
+        className="z-10 bg-white w-full shadow-lg flex-row items-center justify-center"
+      >
         <TouchableOpacity
           onPress={onSubmitSelectAddress}
           className="bg-primary p-4 w-full rounded-full flex-row"
         >
-          <Text className="text-white mx-auto">Chọn địa điểm này</Text>
+          <Text className="text-white mx-auto">
+            {isDropoff ? "Chọn điểm đến" : "Chọn điểm đón khách"}
+          </Text>
         </TouchableOpacity>
       </View>
     </GestureHandlerRootView>

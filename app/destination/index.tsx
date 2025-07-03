@@ -1,13 +1,40 @@
+import { Location } from "@/models/location.model";
+import { getCurrentDropoffLocation } from "@/services/geolocation.service";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Feather from "@expo/vector-icons/Feather";
-import { useRouter } from "expo-router";
-import React from "react";
-import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
+import {
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function DestinationScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const [recentDropoffLocations, setRecentDropoffLocations] = useState<
+    Location[]
+  >([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchLocation = async () => {
+        const dropoffs = await getCurrentDropoffLocation();
+
+        if (dropoffs) {
+          setRecentDropoffLocations(dropoffs);
+        }
+      };
+
+      fetchLocation();
+    }, [])
+  );
+
   return (
     <ScrollView style={{ backgroundColor: "#fff" }}>
       <View
@@ -26,7 +53,10 @@ export default function DestinationScreen() {
             </TouchableOpacity>
             <Text className="text-2xl font-medium">Di chuyển</Text>
           </View>
-          <TouchableOpacity className="p-2 px-5 bg-white/40 blur-lg rounded-full flex-row items-center gap-2">
+          <TouchableOpacity
+            onPress={() => router.push("/destination/dropoff-selector")}
+            className="p-2 px-5 bg-white/40 blur-lg rounded-full flex-row items-center gap-2"
+          >
             <Feather name="map" size={16} color="black" />
             <Text className="text-sm font-medium">Bản đồ</Text>
           </TouchableOpacity>
@@ -41,7 +71,8 @@ export default function DestinationScreen() {
           ></Image>
         </View>
 
-        <View
+        <Pressable
+          onPress={() => router.push("/destination/search-address")}
           style={{
             transform: [{ translateY: "50%" }],
             boxShadow: "rgba(99, 99, 99, 0.2) 0px 2px 8px 0px",
@@ -56,7 +87,7 @@ export default function DestinationScreen() {
             className="w-7 h-7"
           ></Image>
           <Text className="flex-1 text-gray-400 py-3">Bạn muốn đến đâu ?</Text>
-        </View>
+        </Pressable>
       </View>
 
       {/*  */}
@@ -68,30 +99,23 @@ export default function DestinationScreen() {
         }}
       >
         <View className="gap-3">
-          {Array.from({ length: 3 }).map((item, idx) => (
-            <View key={idx} className="flex-row items-center gap-3">
-              <View className="items-center justify-center rounded-full w-12 h-12 bg-primary/10">
-                <Image
-                  style={{
-                    objectFit: "contain",
-                  }}
-                  source={require("../../assets/images/location-v2.png")}
-                  className="w-6 h-6"
-                ></Image>
+          {recentDropoffLocations &&
+            [...recentDropoffLocations].reverse().map((item, idx) => (
+              <View key={idx} className="flex-row items-center gap-3">
+                <View className="items-center justify-center rounded-full w-12 h-12 bg-primary/10">
+                  <Image
+                    style={{
+                      objectFit: "contain",
+                    }}
+                    source={require("../../assets/images/location-v2.png")}
+                    className="w-6 h-6"
+                  ></Image>
+                </View>
+                <View className="flex-1 max-w-full">
+                  <Text className="line-clamp-2">{item.address}</Text>
+                </View>
               </View>
-              <View className="flex-1 max-w-full">
-                <Text className="font-medium line-clamp-1">
-                  Bến xe liên tỉnh Bến xe liên tỉnh Bến xe liên tỉnh Bến xe liên
-                  tỉnh Bến xe liên tỉnh Bến xe liên tỉnh Bến xe liên tỉnh Bến xe
-                  liên tỉnh Bến xe liên tỉnh
-                </Text>
-                <Text className="text-sm text-gray-500 line-clamp-1">
-                  43 Lý Nam Đế 43 Lý Nam Đế 43 Lý Nam Đế 43 Lý Nam Đế 43 Lý Nam
-                  Đế 43 Lý Nam Đế 43 Lý Nam Đế 43 Lý Nam Đế 43 Lý Nam Đế
-                </Text>
-              </View>
-            </View>
-          ))}
+            ))}
         </View>
 
         <View className="mt-5">

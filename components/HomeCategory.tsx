@@ -81,7 +81,7 @@ export function HomeCategory() {
           }}
         >
           <TouchableOpacity
-            onPress={() => router.replace("/destination")}
+            onPress={() => router.push("/destination")}
             style={{
               padding: 10,
               alignItems: "center",
