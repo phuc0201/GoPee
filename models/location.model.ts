@@ -3,8 +3,8 @@ export interface Coordinates {
   longitude: number;
 }
 export class Location {
-  place_id: string;
-  address: string;
+  place_id?: string;
+  address?: string;
   coordinates: Coordinates;
 
   constructor(

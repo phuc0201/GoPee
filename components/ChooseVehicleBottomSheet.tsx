@@ -1,15 +1,20 @@
 import { Vehicles } from "@/dummy-data/vehicle";
 import Entypo from "@expo/vector-icons/Entypo";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
+import { useRouter } from "expo-router";
 import React, { useRef, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
+import RideOptionsBottomSheet from "./RideOptionsBottomSheet";
 import VehicleCard from "./VehicleCard";
 
 const ChooseVehicleBottomSheet = () => {
+  const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [selectedVehicleTypeID, setSelectedVehicleTypeID] = useState<number>(
     Vehicles[0].id
   );
+  const [isOpenRideOptions, setIsOpenRideOptions] = useState<boolean>(false);
+
   return (
     <View style={styles.container}>
       <BottomSheet ref={bottomSheetRef} snapPoints={[200]}>
@@ -24,9 +29,11 @@ const ChooseVehicleBottomSheet = () => {
           ))}
         </BottomSheetView>
       </BottomSheet>
+
       <View style={styles.controlPanel}>
         <View className="flex-row items-center py-4">
           <Pressable
+            onPress={() => router.push("/booking/payment-method")}
             style={{
               borderRightWidth: 1,
               borderTopWidth: 1,
@@ -49,6 +56,7 @@ const ChooseVehicleBottomSheet = () => {
             <Text className="">Tiền mặt</Text>
           </Pressable>
           <Pressable
+            onPress={() => router.push("/booking/promotions")}
             style={{
               borderRightWidth: 1,
               borderTopWidth: 1,
@@ -64,6 +72,7 @@ const ChooseVehicleBottomSheet = () => {
             <Text className="mx-auto">Ưu đãi</Text>
           </Pressable>
           <Pressable
+            onPress={() => setIsOpenRideOptions(!isOpenRideOptions)}
             style={{
               paddingLeft: 30,
               paddingRight: 30,
@@ -77,17 +86,31 @@ const ChooseVehicleBottomSheet = () => {
             />
           </Pressable>
         </View>
-        <Pressable className="bg-primary rounded-full p-4">
+        <Pressable
+          onPress={() => router.replace("/booking/match-driver")}
+          className="bg-primary rounded-full p-4"
+        >
           <Text className="text-white mx-auto">Đặt ngay</Text>
         </Pressable>
       </View>
+
+      <RideOptionsBottomSheet
+        isOpen={isOpenRideOptions}
+        isQuietRide={false}
+        isAssitiveRide={false}
+        onClose={() => setIsOpenRideOptions(false)}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0,
   },
   contentContainer: {
     flex: 1,

@@ -7,6 +7,18 @@ export default function BookingLayout() {
         name="choose-vehicle"
         options={{ headerShown: false }}
       ></Stack.Screen>
+      <Stack.Screen
+        name="payment-method"
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="promotions"
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen
+        name="match-driver"
+        options={{ headerShown: false }}
+      ></Stack.Screen>
     </Stack>
   );
 }
