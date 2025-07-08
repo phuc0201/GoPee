@@ -1,7 +1,7 @@
 import DriverMatching from "@/components/DriverMatching";
 import MapDirection from "@/components/MapDirection";
 import { RegionDefault } from "@/constants/RegionDefault";
-import { Location } from "@/models/location.model";
+import { Coordinates, Location } from "@/models/location.model";
 import {
   getCurrentDropoffLocation,
   getCurrentLocation,
@@ -12,10 +12,10 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useFocusEffect, useRouter } from "expo-router";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import MapView from "react-native-maps";
+import { LatLng } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function MatchDriver() {
@@ -25,12 +25,9 @@ export default function MatchDriver() {
 
   const [pickupLocation, setPickupLocation] = useState<Location>();
   const [dropoffLocation, setDropoffLocation] = useState<Location>();
-
-  const [enableControlMap, setEnableControlMap] = useState<boolean>(false);
-  const [circleRadiusPx, setCircleRadiusPx] = useState<number | null>(null);
+  const [driverCoords, setDriverCoords] = useState<Coordinates>();
   const [driverMatching, setDriverMatching] = useState<boolean>(true);
-
-  const mapRef = useRef<MapView>(null);
+  const PICKED_UP = false;
 
   useFocusEffect(
     useCallback(() => {
@@ -47,6 +44,28 @@ export default function MatchDriver() {
           setDropoffLocation(dropoffLocations[dropoffLocations.length - 1]);
         }
 
+        // Giả lập đường đi của tài xế
+        // if (pickupLocation && dropoffLocations) {
+        //   const json = await getRoute(
+        //     pickupLocation.coordinates,
+        //     dropoffLocations[dropoffLocations.length - 1].coordinates
+        //   );
+        //   if (json && json.routes && json.routes[0]) {
+        //     const path = json.routes[0].overview_polyline.points;
+        //     const decoded = polyline.decode(path);
+
+        //     const coords = decoded.map(([lat, lng]) => ({
+        //       latitude: lat,
+        //       longitude: lng,
+        //     }));
+
+        //     if (coords) {
+        //       setDriverCoords(coords[0]);
+        //       animateDriverMoving(coords);
+        //     }
+        //   }
+        // }
+
         setRegion({
           latitude:
             pickupLocation?.coordinates.latitude || RegionDefault.latitude,
@@ -60,13 +79,33 @@ export default function MatchDriver() {
     }, [])
   );
 
+  const animateDriverMoving = useCallback((coords: LatLng[]) => {
+    let index = 0;
+
+    const move = () => {
+      if (index < coords.length) {
+        setDriverCoords(coords[index]);
+        index++;
+        setTimeout(move, 500);
+      }
+    };
+
+    move();
+  }, []);
+
   useEffect(() => {
+    // if (!driverMatching) {
+    //   const timer = setTimeout(() => {
+    //     router.replace("/booking/review");
+    //   }, 2000);
+    //   return () => clearTimeout(timer);
+    // }
+
     const timer = setTimeout(() => {
-      setEnableControlMap(true);
       setDriverMatching(false);
     }, 2000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [driverMatching, router]);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -93,6 +132,8 @@ export default function MatchDriver() {
           <MapDirection
             pickupLocation={pickupLocation}
             dropoffLocation={dropoffLocation}
+            hasDriverAccepted={true}
+            driverCoords={driverCoords}
           />
 
           <View
@@ -112,7 +153,7 @@ export default function MatchDriver() {
                   source={require("../../assets/images/avatar-default.png")}
                 ></Image>
                 <View>
-                  <Text className="font-medium">Trinh Hoang Phuc</Text>
+                  <Text className="font-medium">Nguyen Ba Phuoc</Text>
                   <View className="flex-row items-center gap-2">
                     <AntDesign name="star" size={24} color="#FFCC00" />
                     <Text className="font-medium">4.5</Text>
@@ -121,7 +162,10 @@ export default function MatchDriver() {
               </View>
 
               <View className="flex-row items-center gap-3">
-                <Pressable className="bg-[#4252FF] w-12 h-12 rounded-full items-center justify-center">
+                <Pressable
+                  onPress={() => router.push("/booking/chat")}
+                  className="bg-[#4252FF] w-12 h-12 rounded-full items-center justify-center"
+                >
                   <MaterialCommunityIcons
                     name="message-processing"
                     size={24}
@@ -185,18 +229,20 @@ export default function MatchDriver() {
               </View>
             </View>
 
-            <Pressable
-              style={{
-                elevation: 5,
-              }}
-              className="p-4 pt-0"
-            >
-              <View className="bg-[#242E42] w-full p-3 rounded-lg">
-                <Text className="text-white w-full text-center font-medium">
-                  Hủy chuyến
-                </Text>
-              </View>
-            </Pressable>
+            {!PICKED_UP && (
+              <Pressable
+                style={{
+                  elevation: 5,
+                }}
+                className="p-4 pt-0"
+              >
+                <View className="bg-[#242E42] w-full p-3 rounded-lg">
+                  <Text className="text-white w-full text-center font-medium">
+                    Hủy chuyến
+                  </Text>
+                </View>
+              </Pressable>
+            )}
           </View>
         </>
       )}

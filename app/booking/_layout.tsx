@@ -19,6 +19,11 @@ export default function BookingLayout() {
         name="match-driver"
         options={{ headerShown: false }}
       ></Stack.Screen>
+      <Stack.Screen
+        name="review"
+        options={{ headerShown: false }}
+      ></Stack.Screen>
+      <Stack.Screen name="chat" options={{ headerShown: false }}></Stack.Screen>
     </Stack>
   );
 }

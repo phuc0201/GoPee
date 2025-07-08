@@ -1,8 +1,8 @@
-import { Location } from "@/models/location.model";
+import { Coordinates, Location } from "@/models/location.model";
 import { getRoute } from "@/services/geolocation.service";
 import polyline from "@mapbox/polyline";
 import { useEffect, useRef, useState } from "react";
-import { Dimensions, View } from "react-native";
+import { Dimensions, Image, View } from "react-native";
 import MapView, {
   LatLng,
   Marker,
@@ -14,12 +14,14 @@ interface MapDirectionProps {
   pickupLocation?: Location;
   dropoffLocation?: Location;
   hasDriverAccepted?: boolean;
-  driverLocation?: Location;
+  driverCoords?: Coordinates;
 }
 
 export default function MapDirection({
   pickupLocation,
   dropoffLocation,
+  hasDriverAccepted,
+  driverCoords,
 }: MapDirectionProps) {
   const mapRef = useRef<MapView>(null);
   const screen = Dimensions.get("window");
@@ -128,6 +130,24 @@ export default function MapDirection({
             pinColor="red"
             image={require("../assets/images/location.png")}
           />
+        )}
+
+        {hasDriverAccepted && driverCoords && (
+          <Marker
+            coordinate={{
+              latitude: driverCoords.latitude,
+              longitude: driverCoords.longitude,
+            }}
+          >
+            <Image
+              style={{
+                width: 30,
+                height: 30,
+                objectFit: "contain",
+              }}
+              source={require("../assets/images/vehicle/motorbike.png")}
+            ></Image>
+          </Marker>
         )}
 
         {animatedRouteCoords.length > 0 && (

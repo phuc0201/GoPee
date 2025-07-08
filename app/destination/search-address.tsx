@@ -49,7 +49,7 @@ export default function SearchByAddress() {
         ]);
 
         if (pickup) {
-          setPickupSearchValue(pickup.address);
+          setPickupSearchValue(pickup.address ?? "");
         }
         if (dropoffs) {
           setRecentDropoffLocations(dropoffs);
@@ -101,10 +101,10 @@ export default function SearchByAddress() {
   async function handleSelectAddress(location: Location) {
     if (isPickup) {
       await onSaveLocation(location);
-      setPickupSearchValue(location.address);
+      setPickupSearchValue(location.address ?? "");
     } else {
       await onSaveDropoffLocation(location);
-      setDropoffSearchValue(location.address);
+      setDropoffSearchValue(location.address ?? "");
 
       router.push("/booking/choose-vehicle");
     }
