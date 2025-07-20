@@ -81,7 +81,7 @@ export default function Chat() {
               </Pressable>
               <View className="flex-row items-center gap-3">
                 <Image
-                  source={require("../../assets/images/avatar-default.png")}
+                  source={require("../../assets/images/avatar-default.jpg")}
                   className="w-12 h-12 rounded-full"
                 />
                 <View>

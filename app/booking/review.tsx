@@ -53,7 +53,7 @@ export default function Review() {
           {/* Avatar */}
           <Image
             style={styles.avatar}
-            source={require("../../assets/images/avatar-default.png")}
+            source={require("../../assets/images/avatar-default.jpg")}
           />
 
           {/* Nội dung */}

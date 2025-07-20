@@ -94,12 +94,12 @@ export default function MatchDriver() {
   }, []);
 
   useEffect(() => {
-    // if (!driverMatching) {
-    //   const timer = setTimeout(() => {
-    //     router.replace("/booking/review");
-    //   }, 2000);
-    //   return () => clearTimeout(timer);
-    // }
+    if (!driverMatching) {
+      const timer = setTimeout(() => {
+        router.replace("/booking/review");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
 
     const timer = setTimeout(() => {
       setDriverMatching(false);
@@ -150,7 +150,7 @@ export default function MatchDriver() {
                     height: 50,
                     borderRadius: 10000,
                   }}
-                  source={require("../../assets/images/avatar-default.png")}
+                  source={require("../../assets/images/avatar-default.jpg")}
                 ></Image>
                 <View>
                   <Text className="font-medium">Nguyen Ba Phuoc</Text>

@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
 export default function TabsLayout() {
-  const [isLogin, setIsLogin] = useState<boolean>(false);
+  const [isLogin, setIsLogin] = useState<boolean>(true);
 
   return (
     <View className="flex-1">

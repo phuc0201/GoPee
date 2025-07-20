@@ -24,6 +24,7 @@ export default function BookingLayout() {
         options={{ headerShown: false }}
       ></Stack.Screen>
       <Stack.Screen name="chat" options={{ headerShown: false }}></Stack.Screen>
+      <Stack.Screen name="[id]" options={{ headerShown: false }}></Stack.Screen>
     </Stack>
   );
 }

@@ -115,7 +115,7 @@ export default function HomeScreen() {
                   <FontAwesome
                     name="credit-card-alt"
                     size={18}
-                    color="#58bc6b"
+                    color="#00b14f"
                   />
                 </View>
               </View>

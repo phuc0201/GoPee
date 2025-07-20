@@ -90,7 +90,7 @@ export default function ChooseVehicle() {
             style={{
               width: 10,
               height: 10,
-              backgroundColor: "#58BC6B",
+              backgroundColor: "#00b14f",
               borderRadius: 100000,
             }}
           ></View>
