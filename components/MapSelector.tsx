@@ -46,12 +46,14 @@ export default function MapSelector({
   useEffect(() => {
     const fetchLocation = async () => {
       const location = await getCurrentLocation();
+      console.log(location);
+
       if (!location) return;
 
       setSelectedAddress(location);
       setRegion({
-        latitude: location.coordinates.latitude,
-        longitude: location.coordinates.longitude,
+        latitude: location.coordinates.lat,
+        longitude: location.coordinates.lng,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       });
@@ -62,16 +64,16 @@ export default function MapSelector({
   const handleRegionChangeComplete = (region: any) => {
     if (isSearchingAddressSuggestion) {
       searchAddressByCoords({
-        latitude: region.latitude,
-        longitude: region.longitude,
+        lat: region.latitude,
+        lng: region.longitude,
       }).then((res) => {
         const newAddresses = res.results.map((item) => {
           return {
             place_id: item.place_id,
             address: item.formatted_address,
             coordinates: {
-              latitude: item.geometry.location.lat,
-              longitude: item.geometry.location.lng,
+              lat: item.geometry.location.lat,
+              lng: item.geometry.location.lng,
             },
           };
         });
@@ -91,8 +93,8 @@ export default function MapSelector({
     setSelectedAddress(location);
 
     const newRegion = {
-      latitude: location.coordinates.latitude,
-      longitude: location.coordinates.longitude,
+      latitude: location.coordinates.lat,
+      longitude: location.coordinates.lng,
       latitudeDelta: 0.001,
       longitudeDelta: 0.001,
     };

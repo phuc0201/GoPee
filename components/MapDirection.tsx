@@ -28,8 +28,8 @@ export default function MapDirection({
   const [animatedRouteCoords, setAnimatedRouteCoords] = useState<LatLng[]>([]);
 
   const initialRegion = {
-    latitude: pickupLocation?.coordinates.latitude ?? 10.7485,
-    longitude: pickupLocation?.coordinates.longitude ?? 106.6265,
+    latitude: pickupLocation?.coordinates.lat ?? 10.7485,
+    longitude: pickupLocation?.coordinates.lng ?? 106.6265,
     latitudeDelta: 0.01,
     longitudeDelta: 0.01,
   };
@@ -88,12 +88,12 @@ export default function MapDirection({
   useEffect(() => {
     if (pickupLocation && dropoffLocation) {
       const origin = {
-        latitude: pickupLocation.coordinates.latitude,
-        longitude: pickupLocation.coordinates.longitude,
+        latitude: pickupLocation.coordinates.lat,
+        longitude: pickupLocation.coordinates.lng,
       };
       const destination = {
-        latitude: dropoffLocation.coordinates.latitude,
-        longitude: dropoffLocation.coordinates.longitude,
+        latitude: dropoffLocation.coordinates.lat,
+        longitude: dropoffLocation.coordinates.lng,
       };
 
       // createRouting(origin, destination);
@@ -111,8 +111,8 @@ export default function MapDirection({
         {pickupLocation && (
           <Marker
             coordinate={{
-              latitude: pickupLocation.coordinates.latitude,
-              longitude: pickupLocation.coordinates.longitude,
+              latitude: pickupLocation.coordinates.lat,
+              longitude: pickupLocation.coordinates.lng,
             }}
             title="Điểm đón"
             pinColor="green"
@@ -123,8 +123,8 @@ export default function MapDirection({
         {dropoffLocation && (
           <Marker
             coordinate={{
-              latitude: dropoffLocation.coordinates.latitude,
-              longitude: dropoffLocation.coordinates.longitude,
+              latitude: dropoffLocation.coordinates.lat,
+              longitude: dropoffLocation.coordinates.lng,
             }}
             title="Điểm đến"
             pinColor="red"
@@ -135,8 +135,8 @@ export default function MapDirection({
         {hasDriverAccepted && driverCoords && (
           <Marker
             coordinate={{
-              latitude: driverCoords.latitude,
-              longitude: driverCoords.longitude,
+              latitude: driverCoords.lat,
+              longitude: driverCoords.lng,
             }}
           >
             <Image

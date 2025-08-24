@@ -1,25 +1,88 @@
-import { Vehicles } from "@/dummy-data/vehicle";
+import useLocation from "@/hooks/useLocation";
+import { QuoteDTO } from "@/models/order.model";
+import { Vehicle } from "@/models/vehicle.model";
+import { BookingService } from "@/services/booking.service";
 import Entypo from "@expo/vector-icons/Entypo";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useRouter } from "expo-router";
-import React, { useRef, useState } from "react";
+import { useFocusEffect, useRouter } from "expo-router";
+import React, { useCallback, useRef, useState } from "react";
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import RideOptionsBottomSheet from "./RideOptionsBottomSheet";
 import VehicleCard from "./VehicleCard";
 
+const bookingService = new BookingService();
+
 const ChooseVehicleBottomSheet = () => {
   const router = useRouter();
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const [selectedVehicleTypeID, setSelectedVehicleTypeID] = useState<number>(
-    Vehicles[0].id
-  );
+  const [selectedVehicleTypeID, setSelectedVehicleTypeID] = useState<number>(1);
   const [isOpenRideOptions, setIsOpenRideOptions] = useState<boolean>(false);
+  const { pickupLocation, dropoffLocation } = useLocation();
+
+  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      const getQuote = async () => {
+        if (pickupLocation && dropoffLocation) {
+          const params: QuoteDTO = {
+            pickupLocation: pickupLocation.coordinates,
+            dropoffLocation: dropoffLocation.coordinates,
+            vehicle: "Bike",
+          };
+
+          console.log(params);
+
+          const quote = await bookingService
+            .getQuote(params)
+            .then((response) => response.data);
+
+          setVehicles([
+            {
+              id: 1,
+              image: require("../assets/images/vehicle/scooter.png"),
+              isPlus: false,
+              name: "GoBike",
+              bio: "Giá siêu tốt",
+              price: quote.fare.Bike.Standard,
+            },
+            {
+              id: 2,
+              image: require("../assets/images/vehicle/scooter.png"),
+              isPlus: true,
+              name: "GoBike Plus",
+              bio: "Xe tay ga cao cấp",
+              price: quote.fare.Bike.Plus,
+            },
+            {
+              id: 3,
+              image: require("../assets/images/vehicle/suv.png"),
+              isPlus: false,
+              name: "GoCar",
+              bio: "Giá siêu tốt",
+              price: quote.fare.Car.Standard,
+            },
+            {
+              id: 4,
+              image: require("../assets/images/vehicle/suv.png"),
+              isPlus: true,
+              name: "GoCar Plus",
+              bio: "Xe sang siêu rộng",
+              price: quote.fare.Car.Plus,
+            },
+          ]);
+        }
+      };
+
+      getQuote();
+    }, [pickupLocation, dropoffLocation])
+  );
 
   return (
     <View style={styles.container}>
       <BottomSheet ref={bottomSheetRef} snapPoints={[200]}>
         <BottomSheetView style={styles.contentContainer}>
-          {Vehicles.map((item) => (
+          {vehicles.map((item) => (
             <VehicleCard
               key={item.id}
               vehicle={{ ...item }}

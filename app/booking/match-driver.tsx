@@ -67,10 +67,8 @@ export default function MatchDriver() {
         // }
 
         setRegion({
-          latitude:
-            pickupLocation?.coordinates.latitude || RegionDefault.latitude,
-          longitude:
-            pickupLocation?.coordinates.longitude || RegionDefault.longitude,
+          latitude: pickupLocation?.coordinates.lat || RegionDefault.latitude,
+          longitude: pickupLocation?.coordinates.lng || RegionDefault.longitude,
           latitudeDelta: RegionDefault.latitudeDelta,
           longitudeDelta: RegionDefault.longitudeDelta,
         });
@@ -84,7 +82,10 @@ export default function MatchDriver() {
 
     const move = () => {
       if (index < coords.length) {
-        setDriverCoords(coords[index]);
+        setDriverCoords({
+          lat: coords[index].latitude,
+          lng: coords[index].longitude,
+        });
         index++;
         setTimeout(move, 500);
       }
@@ -94,12 +95,12 @@ export default function MatchDriver() {
   }, []);
 
   useEffect(() => {
-    if (!driverMatching) {
-      const timer = setTimeout(() => {
-        router.replace("/booking/review");
-      }, 2000);
-      return () => clearTimeout(timer);
-    }
+    // if (!driverMatching) {
+    //   const timer = setTimeout(() => {
+    //     router.replace("/booking/review");
+    //   }, 2000);
+    //   return () => clearTimeout(timer);
+    // }
 
     const timer = setTimeout(() => {
       setDriverMatching(false);

@@ -76,8 +76,8 @@ export default function SearchByAddress() {
             place_id: item.place_id,
             address: item.formatted_address,
             coordinates: {
-              latitude: item.geometry.location.lat,
-              longitude: item.geometry.location.lng,
+              lat: item.geometry.location.lat,
+              lng: item.geometry.location.lng,
             },
           };
         });

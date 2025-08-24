@@ -8,18 +8,18 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ExpoLocation from "expo-location";
 import { Alert, Linking } from "react-native";
 import { LatLng } from "react-native-maps";
-import { goongEndpoint } from "./client";
+import { goongInstance } from "./client";
 
 const apiKey = process.env.EXPO_PUBLIC_GOONG_MAP_API;
 
 export const searchAddressByCoords = ({
-  latitude,
-  longitude,
+  lat,
+  lng,
 }: CoordinatesDTO): Promise<LocationApiResponse> => {
-  return goongEndpoint
+  return goongInstance
     .get("/geocode", {
       params: {
-        latlng: `${latitude},${longitude}`,
+        latlng: `${lat},${lng}`,
         api_key: apiKey,
       },
     })
@@ -29,7 +29,7 @@ export const searchAddressByCoords = ({
 export const searchLocationByAddress = (
   address: string
 ): Promise<LocationApiResponse> => {
-  return goongEndpoint
+  return goongInstance
     .get("/geocode", {
       params: {
         address: address,
@@ -133,7 +133,7 @@ export const requestLocationPermission = async (): Promise<any> => {
 };
 
 export const getRoute = (origin: LatLng, destination: LatLng): Promise<any> => {
-  return goongEndpoint
+  return goongInstance
     .get("/Direction", {
       params: {
         origin: `${origin.latitude},${origin.longitude}`,

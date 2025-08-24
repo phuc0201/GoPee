@@ -1,13 +1,8 @@
 import ChooseVehicleBottomSheet from "@/components/ChooseVehicleBottomSheet";
 import MapDirection from "@/components/MapDirection";
-import { Location } from "@/models/location.model";
-import {
-  getCurrentDropoffLocation,
-  getCurrentLocation,
-} from "@/services/geolocation.service";
+import useLocation from "@/hooks/useLocation";
 import { AntDesign } from "@expo/vector-icons";
-import { useFocusEffect, useRouter } from "expo-router";
-import { useCallback, useState } from "react";
+import { useRouter } from "expo-router";
 import { Pressable, Text, View } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,23 +10,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 export default function ChooseVehicle() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
-  const [pickupLocation, setPickupLocation] = useState<Location>();
-  const [dropoffLocation, setDropoffLocation] = useState<Location>();
-
-  useFocusEffect(
-    useCallback(() => {
-      const fetchLocation = async () => {
-        const [pickup, dropoffs] = await Promise.all([
-          getCurrentLocation(),
-          getCurrentDropoffLocation(),
-        ]);
-
-        if (pickup) setPickupLocation(pickup);
-        if (dropoffs) setDropoffLocation(dropoffs[dropoffs.length - 1]);
-      };
-      fetchLocation();
-    }, [])
-  );
+  const { pickupLocation, dropoffLocation } = useLocation();
 
   return (
     <GestureHandlerRootView className="flex-1">

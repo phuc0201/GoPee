@@ -21,16 +21,16 @@ export default function GeoLocationScreen() {
     requestLocationPermission().then((currLocation) => {
       if (currLocation) {
         searchAddressByCoords({
-          latitude: currLocation.latitude,
-          longitude: currLocation.longitude,
+          lat: currLocation.latitude,
+          lng: currLocation.longitude,
         }).then((res) => {
           if (res.results.length > 0) {
             const location = {
               place_id: res.results[0].place_id,
               address: res.results[0].formatted_address,
               coordinates: {
-                latitude: res.results[0].geometry.location.lat,
-                longitude: res.results[0].geometry.location.lng,
+                lat: res.results[0].geometry.location.lat,
+                lng: res.results[0].geometry.location.lng,
               },
             };
             setSelectedAddress(location);

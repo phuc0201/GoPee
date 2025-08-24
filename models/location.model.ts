@@ -1,6 +1,6 @@
 export interface Coordinates {
-  latitude: number;
-  longitude: number;
+  lng: number;
+  lat: number;
 }
 export class Location {
   place_id?: string;
@@ -11,8 +11,8 @@ export class Location {
     place_id: string,
     address: string = "",
     coordinates: Coordinates = {
-      latitude: 0,
-      longitude: 0,
+      lng: 0,
+      lat: 0,
     }
   ) {
     this.place_id = place_id;
@@ -22,12 +22,12 @@ export class Location {
 }
 
 export class CoordinatesDTO {
-  latitude: number;
-  longitude: number;
+  lng: number;
+  lat: number;
 
-  constructor(latitude: number, longitude: number) {
-    this.latitude = latitude;
-    this.longitude = longitude;
+  constructor(lat: number, lng: number) {
+    this.lng = lng;
+    this.lat = lat;
   }
 }
 
@@ -37,8 +37,8 @@ export interface IAddressComponent {
 }
 
 export interface IGeometryLocation {
-  lat: number;
   lng: number;
+  lat: number;
 }
 
 export interface IGeometry {
