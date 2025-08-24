@@ -1,18 +1,18 @@
 import { SystemConstants } from "@/constants/SystemConstants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { axiosInstance } from "./client";
+import axiosInstance from "./client";
 
 export class AuthService {
   signinWithPhoneNumber(phone: string): Promise<any> {
-    return axiosInstance.post<any>("/auth/signin/otp", {
+    return axiosInstance.post<any>("/auth/otp", {
       phone: "+84" + phone,
     });
   }
 
   verifyOTP(phone: string, OTP: string): Promise<any> {
-    return axiosInstance.post<any>("/auth/signin/otp/verify", {
+    return axiosInstance.post<any>("/auth/otp/verify", {
       phone: "+84" + phone,
-      token: OTP,
+      code: OTP,
     });
   }
 

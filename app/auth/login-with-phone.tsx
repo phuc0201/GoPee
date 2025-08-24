@@ -5,9 +5,9 @@ import { useRef, useState } from "react";
 import { Image, Pressable, Text, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Toast from "react-native-simple-toast";
-const authService = new AuthService();
 
 export default function LoginWithPhone() {
+  const authService = new AuthService();
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const [sentOTP, setSentOTP] = useState<boolean>(false);

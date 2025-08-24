@@ -5,9 +5,8 @@ import { Tabs, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, Text, View } from "react-native";
 
-const authService = new AuthService();
-
 export default function TabsLayout() {
+  const authService = new AuthService();
   const [isLogin, setIsLogin] = useState<boolean>(false);
   const router = useRouter();
 

@@ -1,5 +1,12 @@
+import { Vehicles } from "@/dummy-data/vehicle";
 import useLocation from "@/hooks/useLocation";
-import { QuoteDTO } from "@/models/order.model";
+import {
+  OrderDTO,
+  PaymentMethod,
+  QuoteDTO,
+  ServiceLevel,
+  VehicleType,
+} from "@/models/order.model";
 import { Vehicle } from "@/models/vehicle.model";
 import { BookingService } from "@/services/booking.service";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -18,8 +25,40 @@ const ChooseVehicleBottomSheet = () => {
   const [selectedVehicleTypeID, setSelectedVehicleTypeID] = useState<number>(1);
   const [isOpenRideOptions, setIsOpenRideOptions] = useState<boolean>(false);
   const { pickupLocation, dropoffLocation } = useLocation();
-
+  const [quoting, setQuoting] = useState<boolean>(true);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+
+  async function placeOrder() {
+    if (quoting) return;
+
+    if (pickupLocation && dropoffLocation) {
+      const selectedVehicle = Vehicles.find(
+        (vehicle) => vehicle.id === selectedVehicleTypeID
+      );
+
+      const orderDTO: OrderDTO = {
+        pickupLocation: pickupLocation?.coordinates,
+        dropoffLocation: dropoffLocation.coordinates,
+        pickupAddress: pickupLocation.address || "",
+        dropoffAddress: dropoffLocation.address || "",
+        paymentMethod: PaymentMethod.Cash,
+        vehicle: selectedVehicle?.vehicleType || VehicleType.Bike,
+        serviceLevel: selectedVehicle?.serviceLevel || ServiceLevel.Standard,
+      };
+
+      try {
+        const order = await bookingService
+          .createOrder(orderDTO)
+          .then((res) => res.data);
+        if (order) {
+          console.log(order.id);
+          router.replace("/booking/match-driver");
+        }
+      } catch (error) {
+        console.error("Failed to create order:", error);
+      }
+    }
+  }
 
   useFocusEffect(
     useCallback(() => {
@@ -28,14 +67,17 @@ const ChooseVehicleBottomSheet = () => {
           const params: QuoteDTO = {
             pickupLocation: pickupLocation.coordinates,
             dropoffLocation: dropoffLocation.coordinates,
-            vehicle: "Bike",
+            vehicle: VehicleType.Bike,
           };
-
-          console.log(params);
 
           const quote = await bookingService
             .getQuote(params)
-            .then((response) => response.data);
+            .then((response) => {
+              if (response) {
+                setQuoting(false);
+                return response.data;
+              }
+            });
 
           setVehicles([
             {
@@ -45,6 +87,8 @@ const ChooseVehicleBottomSheet = () => {
               name: "GoBike",
               bio: "Giá siêu tốt",
               price: quote.fare.Bike.Standard,
+              vehicleType: VehicleType.Bike,
+              serviceLevel: ServiceLevel.Standard,
             },
             {
               id: 2,
@@ -53,6 +97,8 @@ const ChooseVehicleBottomSheet = () => {
               name: "GoBike Plus",
               bio: "Xe tay ga cao cấp",
               price: quote.fare.Bike.Plus,
+              vehicleType: VehicleType.Bike,
+              serviceLevel: ServiceLevel.Plus,
             },
             {
               id: 3,
@@ -61,6 +107,8 @@ const ChooseVehicleBottomSheet = () => {
               name: "GoCar",
               bio: "Giá siêu tốt",
               price: quote.fare.Car.Standard,
+              vehicleType: VehicleType.Car,
+              serviceLevel: ServiceLevel.Standard,
             },
             {
               id: 4,
@@ -69,6 +117,8 @@ const ChooseVehicleBottomSheet = () => {
               name: "GoCar Plus",
               bio: "Xe sang siêu rộng",
               price: quote.fare.Car.Plus,
+              vehicleType: VehicleType.Car,
+              serviceLevel: ServiceLevel.Plus,
             },
           ]);
         }
@@ -149,10 +199,7 @@ const ChooseVehicleBottomSheet = () => {
             />
           </Pressable>
         </View>
-        <Pressable
-          onPress={() => router.replace("/booking/match-driver")}
-          className="bg-primary rounded-full p-4"
-        >
+        <Pressable onPress={placeOrder} className="bg-primary rounded-full p-4">
           <Text className="text-white mx-auto">Đặt ngay</Text>
         </Pressable>
       </View>

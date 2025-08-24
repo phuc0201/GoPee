@@ -46,7 +46,6 @@ export default function MapSelector({
   useEffect(() => {
     const fetchLocation = async () => {
       const location = await getCurrentLocation();
-      console.log(location);
 
       if (!location) return;
 
